@@ -1,0 +1,31 @@
+df <- USArrests
+
+apply(df,2,mean)
+apply(df,2,var)
+pr.out <- prcomp(df,scale=T) # scale=T is used to scale variables to have st.dev = 1 
+biplot(pr.out, scale = 0)
+variance <- pr.out$sdev^2
+pve <- variance/sum(variance) #Principal Variance Explained calculation 
+#First two principal components explain 62%+24.74% in total and the rest two only 8.9+4.3%
+
+pl1 <- plot(pve, xlab = 'Principal Component Value', ylab = 'Proportion of variane explained',
+            ylim = c(0,1), type = 'b')
+
+pl2 <- plot(cumsum(pve),xlab = 'Principal Component Value', ylab = 'Proportion of variane explained',
+            ylim = c(0,1), type = 'b')
+# K-means Clustering 
+x <- matrix(rnorm(100), ncol=2)
+x[1:25,1]<- x[1:25,1]+3
+x[1:25,2]<- x[1:25,2]-4
+km.out <- kmeans(x,2,nstart = 20)
+plot(x,col = (km.out$cluster+1),pch = 20, cex = 2) #adding a number set 2 colors to different classes 
+
+#Hierarchial Clustering 
+hc.complete <- hclust(dist(x), method = 'complete')
+hc.average <- hclust(dist(x), method = 'average')
+hc.single<- hclust(dist(x), method = 'single')
+par(mfrow = c(1,3))
+plot(hc.complete, main = 'Complete')
+plot(hc.average, main = 'average')
+plot(hc.single, main = 'single')
+cutree(hc.single,4)
