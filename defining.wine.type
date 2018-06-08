@@ -1,0 +1,46 @@
+library(ISLR)
+library(e1071)
+library(MASS)
+library(dplyr)
+library(caTools)
+library(ggplot2)
+library(randomForest)
+library(tree)
+library(gbm)
+library(plotly)
+library(caret)
+library(Amelia)
+library(corrgram)
+
+df1 <- read.csv('winequality-red.csv', sep = ';')
+df2 <- read.csv('winequality-white.csv', sep = ';')
+label <- rep('red',times = 1599)
+label2 <- rep('white', times = 4898)
+df1 <- cbind(df1,label)
+df2 <- cbind(df2, 'label'= label2)
+df <- rbind(df1,df2)
+#EDA
+pl1 <- corrgram(df[1:12], order =T, upper.panel = panel.cor,
+                text.panel = panel.txt, lower.panel = panel.shade, font.labels = 10,
+                col.regions=colorRampPalette(c("darkgoldenrod4", "burlywood1","darkkhaki", "darkgreen")))
+
+pl2 <- ggplot(df,aes(residual.sugar,fill=label))+geom_histogram(color= 'A93226', bins=40) +
+                scale_fill_manual(values = c('#212F3C','#F1C40F'))+scale_x_continuous(limits = c(min(0),max(20)))
+
+pl3 <- ggplot(df,aes(citric.acid, fill=label))+geom_histogram(color='A93226',binwidth = 0.05)+
+                scale_fill_manual(values = c('#212F3C','#F1C40F')) +theme_bw()
+
+pl4 <- ggplot(df,aes(x=as.factor(quality), y=alcohol,fill=label))+geom_boxplot(color='#A93226')+
+                scale_fill_manual(values = c('#212F3C','#F1C40F')) +theme_bw()
+
+clus.data <- df[1:12]
+km.out <-kmeans(clus.data,2,nstart = 30)
+table(km.out$cluster,df$label)
+print(paste('The model can identify right wine type with the possibility of:', round((1514+3604)/6497,2)))
+
+hc <- hclust(dist(sd.data))
+hc.clusters <- cutree(hc,4)
+table(hc.clusters,df$label)
+hc.aver <- hclust(dist(sd.data),method = 'average')
+hc.a <- cutree(hc.aver,2)
+table(hc.a,df$label)
