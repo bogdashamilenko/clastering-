@@ -24,10 +24,10 @@ pl1 <- corrgram(df[1:12], order =T, upper.panel = panel.cor,
                 text.panel = panel.txt, lower.panel = panel.shade, font.labels = 10,
                 col.regions=colorRampPalette(c("darkgoldenrod4", "burlywood1","darkkhaki", "darkgreen")))
 
-pl2 <- ggplot(df,aes(residual.sugar,fill=label))+geom_histogram(color= 'A93226', bins=40) +
+pl2 <- ggplot(df,aes(residual.sugar,fill=label))+geom_histogram(color= '#A93226', bins=40) +
                 scale_fill_manual(values = c('#212F3C','#F1C40F'))+scale_x_continuous(limits = c(min(0),max(20)))
 
-pl3 <- ggplot(df,aes(citric.acid, fill=label))+geom_histogram(color='A93226',binwidth = 0.05)+
+pl3 <- ggplot(df,aes(citric.acid, fill=label))+geom_histogram(color='#A93226',binwidth = 0.05)+
                 scale_fill_manual(values = c('#212F3C','#F1C40F')) +theme_bw()
 
 pl4 <- ggplot(df,aes(x=as.factor(quality), y=alcohol,fill=label))+geom_boxplot(color='#A93226')+
